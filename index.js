@@ -1,0 +1,39 @@
+const cors = require('cors');
+const express = require('express');
+// Replace with your secret key
+const app = express();
+const uuid = require('uuid');
+app.use(express.json());
+app.use(cors());
+// require('dotenv').config();
+//4242 4242 4242 4242|02/27|23323
+
+
+const stripe = require('stripe')("sk_test_51Nxbg2SBfgUqTL1TAixqrnLV0R6K6pnZN2sY3XeoV8u64M59ZJOvVROdyvUSMEL5AZfp9joK6pzl8L2hjeDPXCpq00LtzTaKCo")
+
+
+
+app.post('/payment', async (req, res) => {
+    try {
+        const { amount } = req.body
+        if (amount === 0) {
+            return res.json('No items to order')
+        }
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount*100,
+            currency: 'INR',
+            payment_method_types: ['card'],
+        });
+        if (paymentIntent.client_secret) {
+            res.json(paymentIntent)
+        }
+    } catch (error) {
+        res.status(401).json(error);
+    }
+})
+app.get('/', (req, res) => {
+    res.send('It works on this port');
+});
+
+
+app.listen(8282, () => console.log('Listening at port 8282'));
