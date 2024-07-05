@@ -5,7 +5,7 @@ const app = express();
 const uuid = require('uuid');
 app.use(express.json());
 app.use(cors());
-require('dotenv').config();
+// require('dotenv').config();
 //4242 4242 4242 4242|02/27|23323
 
 
