@@ -5,11 +5,11 @@ const app = express();
 const uuid = require('uuid');
 app.use(express.json());
 app.use(cors());
-// require('dotenv').config();
+require('dotenv').config();
 //4242 4242 4242 4242|02/27|23323
 
 
-const stripe = require('stripe')("sk_test_51Nxbg2SBfgUqTL1TAixqrnLV0R6K6pnZN2sY3XeoV8u64M59ZJOvVROdyvUSMEL5AZfp9joK6pzl8L2hjeDPXCpq00LtzTaKCo")
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 
 
@@ -20,7 +20,7 @@ app.post('/payment', async (req, res) => {
             return res.json('No items to order')
         }
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount*100,
+            amount: amount * 100,
             currency: 'INR',
             payment_method_types: ['card'],
         });
